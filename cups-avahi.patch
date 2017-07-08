@@ -505,7 +505,7 @@ diff -up cups-1.4.0/backend/dnssd.c.avahi cups-1.4.0/backend/dnssd.c
  
    fprintf(stderr, "DEBUG2: query_callback(sdRef=%p, flags=%x, "
                    "interfaceIndex=%d, errorCode=%d, fullName=\"%s\", "
-@@ -673,84 +923,213 @@ query_callback(
+@@ -673,84 +923,212 @@ query_callback(
    if ((ptr = strstr(name, "._")) != NULL)
      *ptr = '\0';
  
@@ -562,7 +562,7 @@ diff -up cups-1.4.0/backend/dnssd.c.avahi cups-1.4.0/backend/dnssd.c
 +{
 +  AvahiClient		*client;
 +  cups_device_t		key,
-+			*device = NULL;
++			*device;
 +  char			uqname[1024],
 +			*ptr;
 +  cups_txt_records_t	txtr;
@@ -597,8 +597,7 @@ diff -up cups-1.4.0/backend/dnssd.c.avahi cups-1.4.0/backend/dnssd.c
 +  */
 +
 +  txtr.txt = txt;
-+  if (txt != NULL)
-+    device = find_device ((cups_array_t *) context, &txtr, &key);
++  device = find_device ((cups_array_t *) context, &txtr, &key);
 +  if (device)
 +  {
 +   /*
@@ -771,7 +770,7 @@ diff -up cups-1.4.0/backend/dnssd.c.avahi cups-1.4.0/backend/dnssd.c
          if (!strncasecmp(key, "usb_", 4))
  	{
  	 /*
-@@ -805,6 +1184,10 @@ query_callback(
+@@ -805,6 +1183,10 @@ query_callback(
  	  if (device->type == CUPS_DEVICE_PRINTER)
  	    device->sent = 1;
  	}
@@ -782,7 +781,7 @@ diff -up cups-1.4.0/backend/dnssd.c.avahi cups-1.4.0/backend/dnssd.c
        }
  
        if (device->device_id)
-@@ -854,11 +1237,9 @@ query_callback(
+@@ -854,11 +1236,9 @@ query_callback(
      }
    }
  

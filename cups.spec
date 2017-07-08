@@ -9,7 +9,7 @@
 Summary: Common Unix Printing System
 Name: cups
 Version: 1.4.2
-Release: 74%{?dist}
+Release: 44%{?dist}.1
 License: GPLv2
 Group: System Environment/Daemons
 Source: http://ftp.easysw.com/pub/cups/%{version}/cups-%{version}-source.tar.bz2
@@ -114,55 +114,11 @@ Patch76: cups-str3861.patch
 Patch77: cups-str3809.patch
 Patch78: cups-str3867.patch
 Patch79: cups-str3795-str3880.patch
-Patch80: cups-handle-empty-files.patch
-Patch81: cups-str4015.patch
-Patch82: cups-str3449.patch
-Patch83: cups-str3635.patch
-Patch84: cups-auth-return-unauthorized.patch
-Patch85: cups-str3392.patch
-Patch86: cups-ipp-multifile.patch
-Patch87: cups-str3406-and-r8951.patch
-Patch88: cups-str3754.patch
-Patch89: cups-stringpool-setprinterattr.patch
-Patch90: cups-format_log-segfault.patch
-Patch91: cups-str3521.patch
-Patch92: cups-setenv.patch
-Patch93: cups-cupsctl-man.patch
-Patch94: cups-synconclose.patch
-Patch95: cups-settimeout.patch
-Patch96: cups-polld-reconnect.patch
-Patch97: cups-str3768.patch
-Patch98: cups-str3601.patch
-Patch99: cups-nodatadelay.patch
-Patch100: cups-str4440.patch
-Patch101: cups-cgi.patch
-Patch102: cups-send_document-crash.patch
-Patch103: cups-str3455.patch
-Patch104: cups-str3969.patch
-Patch105: cups-str4569.patch
-Patch106: cups-failover-backend.patch
-Patch107: cups-sf01321303.patch
-Patch108: cups-polld-busy-loop.patch
-Patch109: cups-str4457.patch
-Patch110: cups-str4591.patch
-Patch111: cups-str4619.patch
-Patch112: cups-str3622.patch
-Patch113: cups-str4742.patch
-Patch114: cups-job-reset-kill_time.patch
+
+Patch100: cups-lspp.patch
 
 ## SECURITY PATCHES:
-Patch150: cups-CVE-2012-5519.patch
-Patch151: cups-CVE-2014-2856.patch
-Patch152: cups-CVE-2014-3537.patch
-Patch153: cups-CVE-2014-5029-5030-5031.patch
-Patch154: cups-str4461.patch
-Patch155: cups-str4475.patch
-Patch156: cups-str4476.patch
-Patch157: cups-str4609.patch
-Patch158: cups-str4551.patch
 
-## Optional LSPP patch:
-Patch200: cups-lspp.patch
 
 Epoch: 1
 Url: http://www.cups.org/
@@ -250,7 +206,7 @@ Summary: Common Unix Printing System - php module
 Group: Development/Languages
 Requires: %{name} = %{epoch}:%{version}-%{release}
 Requires: %{name}-libs = %{epoch}:%{version}-%{release}
-%if 0%{?php_zend_api:1}
+%if 0%{?php_zend_api}
 Requires: php(zend-abi) = %{php_zend_api}
 Requires: php(api) = %{php_core_api}
 %else
@@ -463,110 +419,13 @@ module.
 # The scheduler might leave old job data files in the spool directory
 # (STR #3795, STR #3880, bug #735505).
 %patch79 -p1 -b .str3795-str3880
-# Don't create zero-length request files (bug #740093).
-%patch80 -p1 -b .handle-empty-files
-# The lp and lpr commands did not cancel jobs queued from stdin on an error
-# (STR #4015, bug #738914).
-%patch81 -p1 -b .str4015
-# cupsPrintFiles() did not report all errors (STR #3449, bug #740093)
-%patch82 -p1 -b .str3449
-# Fix German translation of web interface search template (STR #3635,
-# bug #806818).
-%patch83 -p1 -b .str3635
-# Avoid "forbidden" error when moving job between queues via web UI
-# (bug #834445).
-%patch84 -p1 -b .auth-return-unauthorized
-# Fixed LDAP browsing issues (bug #870386).
-%patch85 -p1 -b .str3392
-# Fixes for jobs with multiple files and multiple formats.
-%patch86 -p1 -b .ipp-multifile
-# Upstream patch for broken multipart handling (bug #852846).
-%patch87 -p1 -b .str3406-and-r8951.patch
-# Don't crash when job queued for printer that times out (bug #855431).
-%patch88 -p1 -b .str3754
-# Prevent stringpool corruption (bug #884851).
-%patch89 -p1 -b .stringpool-setprinterattr
-# Prevent format_log segfault (bug #971079).
-%patch90 -p1 -b .format_log-segfault
-# Fix 'collection' attribute sending (bug #978387).
-%patch91 -p1 -b .str3521
-# Fix SetEnv directive in cupsd.conf (bug #986495).
-%patch92 -p1 -b .setenv
-# Fix cupsctl man page typo (bug #1011076).
-%patch93 -p1 -b .cupsctl-man
-# Added new SyncOnClose directive to use fsync() after altering
-# configuration files: defaults to "Yes". Adjust in cupsd.conf (bug #984883).
-%patch94 -p1 -b .synconclose
-# Backported httpSetTimeout API function, and use it in ipp backend.
-%patch95 -p1 -b .settimeout
-# cups-polld: reconnect on error (bug #769292).
-%patch96 -p1 -b .polld-reconnect
-# Avoid replaying GSS credentials (bug #1040293).
-%patch97 -p1 -b .str3768
-# Fixed typo preventing web interface from changing driver (bug #1104483).
-%patch98 -p1 -b .str3601
-# Fixed timeout issue with cupsd reading when there is no data ready.
-%patch99 -p1 -b .nodatadelay
-# Applied patch to fix 'Bad request' errors as a result of adding in
-# httpSetTimeout (STR #4440).
-%patch100 -p1 -b .str4440
-# Fix CGI handling (STR #4454, bug #1120419).
-%patch101 -p1 -b .cgi
-# Fix for segfault in send_document (bug #1170002).
-%patch102 -p1 -b .send_document-crash
-# Only enable multi-part support for selected user agents
-# (bug #1178370, STR #3455).
-%patch103 -p1 -b .str3455
-# Apply upstream patch to fix PageLogFormat reference in documentation
-# (bug #951553, STR #3969).
-%patch104 -p1 -b .str3969
-# Apply patch to fix sanitize_title documentation (bug #988062, STR #4569).
-%patch105 -p1 -b .str4569
-# Added failover backend to support priority-based failover (bug #1115219).
-%patch106 -p1 -b .failover-backend
-# Apply upstream patch to prevent crash in cupsdContinueJob() (bug #1187840).
-%patch107 -p1 -b .sf01321303
-# Prevent cups-polld busy loop when access is restricted (bug #1164854).
-%patch108 -p1 -b .polld-busy-loop
-# Document ErrorPolicy in cupsd.conf manpage (bug #1120587, STR #4457).
-%patch109 -p1 -b .str4457
-# Validate ErrorPolicy directory when reading configuration (bug #1196217,
-# STR #4591).
-%patch110 -p1 -b .str4591
-# Apply patch for robustness in cookie parser (STR #4619).
-%patch111 -p1 -b .str4619
-# The socket backend could go into an infinite loop with certain printers
-# (bug #1276772, STR #3622)
-%patch112 -p1 -b .str3622
-# Don't unload jobs that couldn't be saved (bug #1283003, STR #4742).
-%patch113 -p1 -b .str4742
-# Reset job's kill_time in finalize_job() (bug #1293498).
-%patch114 -p1 -b .kill-time
-
-# SECURITY PATCHES:
-%patch150 -p1 -b .CVE-2012-5519
-%patch151 -p1 -b .CVE-2014-2856
-%patch152 -p1 -b .CVE-2014-3537
-# CVE-2014-5029, CVE-2014-5030, CVE-2014-5031 (#1122601)
-%patch153 -p1 -b .CVE-2014-5029-5030-5031
-# Fix conf/log file reading for authenticated users (STR #4461).
-%patch154 -p1 -b .str4461
-# Fix icon display in web interface during server restart (STR #4475).
-%patch155 -p1 -b .str4475
-# New SSLOptions directive to enable SSL3 and/or RC4, now disabled by
-# default (bug #1161171).
-%patch156 -p1 -b .str4476
-# Improper Update of Reference Count -- CVE-2015-1158
-# Cross-Site Scripting -- CVE-2015-1159
-# (bug #1229983)
-%patch157 -p1 -b .str4609
-# cupsRasterReadPixels buffer overflow -- CVE-2014-9679 (bug #1229983).
-%patch158 -p1 -b .str4551
 
 %if %lspp
 # LSPP support.
-%patch200 -p1 -b .lspp
+%patch100 -p1 -b .lspp
 %endif
+
+# SECURITY PATCHES:
 
 
 sed -i -e '1iMaxLogSize 0' conf/cupsd.conf.in
@@ -642,7 +501,7 @@ install -c -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/pixmaps
 install -c -m 644 cups-lpd.real $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/cups-lpd
 install -c -m 644 %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/cups
 install -c -m 755 %{SOURCE9} $RPM_BUILD_ROOT%{cups_serverbin}/backend/ncp
-install -c -m 700 %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/cups
+install -c -m 755 %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/cups
 install -c -m 755 %{SOURCE11} $RPM_BUILD_ROOT%{cups_serverbin}/filter/textonly
 install -c -m 644 %{SOURCE12} $RPM_BUILD_ROOT%{_datadir}/cups/model/textonly.ppd
 
@@ -869,151 +728,13 @@ rm -rf $RPM_BUILD_ROOT
 %{php_extdir}/phpcups.so
 
 %changelog
-* Wed Jan 13 2016 Jiri Popelka <jpopelka@redhat.com> - 1:1.4.2-74
-- Reset job's kill_time in finalize_job() (bug #1293498).
+* Mon Mar 19 2012 ClearFoundation <developer@clearfoundation.com> 1:1.4.2-44.clear.1
+- app package now handles all customizations, merging with upstream
 
-* Tue Jan 12 2016 Jiri Popelka <jpopelka@redhat.com> - 1:1.4.2-73
-- Fix failover backend options parsing (bug #1231322).
-- The socket backend could go into an infinite loop with certain printers
-  (bug #1276772, STR #3622)
-- dnssd backend: don't crash if avahi gives a callback with no TXT record
-  (bug #1269305)
-- Don't unload jobs that couldn't be saved (bug #1283003, STR #4742).
-
-* Wed Jun 10 2015 Jiri Popelka <jpopelka@redhat.com> - 1:1.4.2-72
-- CVE-2015-1158, CVE-2015-1159, CVE-2014-9679 (bug #1229983).
-
-* Wed Apr 15 2015 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-71
-- Apply patch for robustness in cookie parser (STR #4619).
-
-* Wed Mar  4 2015 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-70
-- Fixed SetEnv patch (bug #1198394).
-- Validate ErrorPolicy directory when reading configuration (bug #1196217,
-  STR #4591).
-
-* Mon Feb 23 2015 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-69
-- Document ErrorPolicy in cupsd.conf manpage (bug #1120587, STR #4457).
-- Prevent cups-polld busy loop when access is restricted (bug #1164854).
-- Apply upstream patch to prevent crash in cupsdContinueJob() (bug #1187840).
-- Added failover backend to support priority-based failover (bug #1115219).
-- Apply patch to fix sanitize_title documentation (bug #988062, STR #4569).
-
-* Fri Jan  9 2015 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-68
-- Apply upstream patch to fix PageLogFormat reference in documentation
-  (bug #951553, STR #3969).
-- Only enable multi-part support for selected user agents
-  (bug #1178370, STR #3455).
-- Fix for segfault in send_document (bug #1170002).
-- New SSLOptions directive to enable SSL3 and/or RC4, now disabled by
-  default (bug #1161171).
-
-* Mon Sep  1 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-67
-- Revert change to whitelist /rss/ resources, as this was not used
-  upstream.
-
-* Mon Sep  1 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-66
-- More STR #4461 fixes from upstream: make rss feeds world-readable,
-  but cachedir private.
-- Fix icon display in web interface during server restart (STR #4475).
-
-* Wed Aug 27 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-65
-- Fixes for upstream patch for STR #4461: allow /rss/ requests for
-  files we created.
-
-* Tue Aug 26 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-64
-- Use upstream patch for STR #4461.
-
-* Thu Aug 14 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-63
-- Applied upstream patch to fix CVE-2014-5029 (bug #1122600),
-  CVE-2014-5030 (bug #1128764), CVE-2014-5031 (bug #1128767).
-- Fix conf/log file reading for authenticated users (STR #4461).
-
-* Fri Aug  1 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-62
-- Fix CGI handling (STR #4454, bug #1120419).
-
-* Thu Jul 10 2014 Jiri Popelka <jpopelka@redhat.com> - 1:1.4.2-61
-- fix patch for CVE-2014-3537 (bug #1117794)
-
-* Wed Jul 09 2014 Jiri Popelka <jpopelka@redhat.com> - 1:1.4.2-60
-- CVE-2014-2856: cross-site scripting flaw (bug #1117798)
-- CVE-2014-3537: insufficient checking leads to privilege escalation (bug #1117794)
-
-* Thu Jun 19 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-59
-- Removed package description changes.
-
-* Thu Jun 19 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-58
-- Applied patch to fix 'Bad request' errors as a result of adding in
-  httpSetTimeout (STR #4440, also part of svn revision 9967).
-
-* Mon Jun 16 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-57
-- Fixed timeout issue with cupsd reading when there is no data ready
-  (bug #1110045).
-
-* Fri Jun 13 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-56
-- Fixed synconclose patch to avoid 'too many arguments for format' warning.
-- Fixed settimeout patch to include math.h for fmod declaration.
-
-* Wed Jun 11 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-55
-- Fixed typo preventing web interface from changing driver (bug #1104483,
-  STR #3601).
-- Fixed SyncOnClose patch (bug #984883).
-
-* Wed Apr 30 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-54
-- Use upstream patch to avoid replaying GSS credentials (bug #1040293).
-
-* Thu Apr  3 2014 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-53
-- Prevent BrowsePoll problems across suspend/resume (bug #769292):
-  - Eliminate indefinite wait for response (svn revision 9688).
-  - Backported httpSetTimeout API function from CUPS 1.5 and use it in
-    the ipp backend so that we wait indefinitely until the printer
-    responds, we get a hard error, or the job is cancelled.
-  - cups-polld: reconnect on error.
-- Added new SyncOnClose directive to use fsync() after altering
-  configuration files: defaults to "Yes". Adjust in cupsd.conf (bug #984883).
-- Fix cupsctl man page typo (bug #1011076).
-- Use more portable rpm specfile syntax for conditional php building
-  (bug #988598).
-- Fix SetEnv directive in cupsd.conf (bug #986495).
-- Fix 'collection' attribute sending (bug #978387).
-- Prevent format_log segfault (bug #971079).
-- Prevent stringpool corruption (bug #884851).
-- Don't crash when job queued for printer that times out (bug #855431).
-- Upstream patch for broken multipart handling (bug #852846).
-- Install /etc/cron.daily/cups with correct permissions (bug #1012482).
-
-* Tue Aug  6 2013 Tim Waugh <twaugh@redhat.com> - 1:1.4.2-52
-- Fixes for jobs with multiple files and multiple formats (bug #972242).
-
-* Thu Feb 28 2013 Tim Waugh <twaugh@redhat.com> 1:1.4.2-51
-- Applied patch to fix CVE-2012-5519 (privilege escalation for users
-  in SystemGroup or with equivalent polkit permission).  This prevents
-  HTTP PUT requests with paths under /admin/conf/ other than that for
-  cupsd.conf, and also prevents such requests altering certain
-  configuration directives such as PageLog and FileDevice (bug #875898).
-
-* Fri Oct 26 2012 Tim Waugh <twaugh@redhat.com> 1:1.4.2-50
-- Fixed LDAP browsing issues (bug #870386).
-
-* Tue Aug 21 2012 Tim Waugh <twaugh@redhat.com> 1:1.4.2-49
-- Avoid "forbidden" error when moving job between queues via web UI
-  (bug #834445).
-
-* Mon May 21 2012 Tim Waugh <twaugh@redhat.com> 1:1.4.2-48
-- Fix German translation of web interface search template (STR #3635,
-  bug #806818).
-
-* Mon Mar 19 2012 Jiri Popelka <jpopelka@redhat.com> 1:1.4.2-47
-- cupsPrintFiles() did not report all errors (STR #3449, bug #740093)
-
-* Mon Mar 19 2012 Jiri Popelka <jpopelka@redhat.com> 1:1.4.2-46
-- Fix lp and lpr return string (bug #740093).
-
-* Tue Feb 14 2012 Jiri Popelka <jpopelka@redhat.com> 1:1.4.2-45
-- Don't create zero-length request files (bug #740093).
-- The lp and lpr commands did not cancel jobs queued from stdin on an error
-  (STR #4015, bug #738914).
-- Fixed condition in textonly filter to create temporary file
-  regardless of the number of copies specified. (bug #738410)
+* Fri Dec 9 2011 ClearFoundation <developer@clearfoundation.com> 1:1.4.2-44.clear
+- added init script functions for improved security and SSL support
+- change config file to isolate parts of the config
+- add /var/cache/cups directory
 
 * Tue Oct 18 2011 Jiri Popelka <jpopelka@redhat.com> 1:1.4.2-44
 - Init script should source /etc/sysconfig/cups (bug #744791)
@@ -1589,12 +1310,12 @@ rm -rf $RPM_BUILD_ROOT
 * Wed Apr  2 2008 Tim Waugh <twaugh@redhat.com> 1:1.3.7-1
 - 1.3.7.  No longer need str2715, str2727, or CVE-2008-0047 patches.
 
-* Tue Apr  1 2008 Tim Waugh <twaugh@redhat.com> 1:1.3.6-9
+* Thu Apr  1 2008 Tim Waugh <twaugh@redhat.com> 1:1.3.6-9
 - Applied patch to fix CVE-2008-1373 (GIF overflow, bug #438303).
 - Applied patch to prevent heap-based buffer overflow in CUPS helper
   program (bug #436153, CVE-2008-0047, STR #2729).
 
-* Tue Apr  1 2008 Tim Waugh <twaugh@redhat.com> 1:1.3.6-8
+* Thu Apr  1 2008 Tim Waugh <twaugh@redhat.com> 1:1.3.6-8
 - Ship a few doc files (bug #438598).
 
 * Thu Mar 27 2008 Tim Waugh <twaugh@redhat.com> 1:1.3.6-7
@@ -1907,7 +1628,7 @@ rm -rf $RPM_BUILD_ROOT
 - Fixed support for /dev/ttyUSB devices (bug #212577, STR #2061).
 - Fixed parallel backend (bug #213021, STR #2056).
 
-* Thu Oct 26 2006 Tim Waugh <twaugh@redhat.com>
+* Tue Oct 26 2006 Tim Waugh <twaugh@redhat.com>
 - Ship a real lpoptions file to make sure it is world-readable (bug #203510).
 
 * Mon Oct 23 2006 Tim Waugh <twaugh@redhat.com> 1:1.2.5-3
@@ -2104,7 +1825,7 @@ rm -rf $RPM_BUILD_ROOT
 - Disable back-channel data in the usb backend (STR #1705, bug #192034).
 - Fix for 'browsing stops on reload', STR #1670 (bug #191217).
 
-* Wed May 17 2006 Tim Waugh <twaugh@redhat.com>
+* Wed May 16 2006 Tim Waugh <twaugh@redhat.com>
 - Sync to svn5538.
 - Added 'restartlog' to initscript, for clearing out error_log.  Useful
   for problem diagnosis.
